@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "GZCalendar"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "A GZCalendar For Developer."
   s.description  = <<-DESC
     For the convenience of the calendar library development and encapsulation
