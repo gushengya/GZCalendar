@@ -7,7 +7,6 @@
 //
 
 #import "NSDate+Calendar.h"
-#import "GZCalendarManager.h"
 
 /// 天干
 static NSString const *HeavenlyStems[10] =
@@ -44,6 +43,14 @@ static NSString const *LunarDay[30] =
 + (NSCalendar *)gregorianCalendar
 {
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    calendar.timeZone = [NSTimeZone localTimeZone];
+    return calendar;
+}
+
+/// 农历
++ (NSCalendar *)chinaCalendar
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierChinese];
     calendar.timeZone = [NSTimeZone localTimeZone];
     return calendar;
 }
@@ -127,7 +134,7 @@ static NSString const *LunarDay[30] =
 - (NSString *)heavenlyStemAndEarthlyBranche
 {
     NSAssert(self != nil, @"时间为空");
-    NSDateComponents *com = [[GZCalendarManager manager].lunarCalendar components:NSCalendarUnitYear fromDate:self];
+    NSDateComponents *com = [[self.class chinaCalendar] components:NSCalendarUnitYear fromDate:self];
     NSUInteger heavenlyIndex = (com.year - 1) % 10;
     NSUInteger earthlyIndex = (com.year - 1) % 12;
     return [NSString stringWithFormat:@"%@%@", HeavenlyStems[heavenlyIndex], EarthlyBranches[earthlyIndex]];
@@ -137,7 +144,7 @@ static NSString const *LunarDay[30] =
 - (NSString *)zodiac
 {
     NSAssert(self != nil, @"时间为空");
-    NSDateComponents *com = [[GZCalendarManager manager].lunarCalendar components:NSCalendarUnitYear fromDate:self];
+    NSDateComponents *com = [[self.class chinaCalendar] components:NSCalendarUnitYear fromDate:self];
     NSUInteger zodiacIndex = (com.year - 1) % 12;
     return [NSString stringWithFormat:@"%@", Zodiac[zodiacIndex]];
 }
@@ -146,7 +153,7 @@ static NSString const *LunarDay[30] =
 - (NSString *)lunarMonth
 {
     NSAssert(self != nil, @"时间为空");
-    NSDateComponents *com = [[GZCalendarManager manager].lunarCalendar components:NSCalendarUnitMonth fromDate:self];
+    NSDateComponents *com = [[self.class chinaCalendar] components:NSCalendarUnitMonth fromDate:self];
     NSUInteger lunarMonthIndex = (com.month - 1) % 12;
     return [NSString stringWithFormat:@"%@", LunarMonth[lunarMonthIndex]];
 }
@@ -155,7 +162,7 @@ static NSString const *LunarDay[30] =
 - (NSString *)lunarDay
 {
     NSAssert(self != nil, @"时间为空");
-    NSDateComponents *com = [[GZCalendarManager manager].lunarCalendar components:NSCalendarUnitDay fromDate:self];
+    NSDateComponents *com = [[self.class chinaCalendar] components:NSCalendarUnitDay fromDate:self];
     NSUInteger lunarDayIndex = (com.day - 1) % 30;
     return [NSString stringWithFormat:@"%@", LunarDay[lunarDayIndex]];
 }
